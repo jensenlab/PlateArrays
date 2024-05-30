@@ -5,7 +5,21 @@ using JuMP , Gurobi
 
 
 
+"""
+    hybrid_MILP(P::Int,N::Int,plate::BitMatrix;MILP_timelimit=100,MILP_output=true,kwargs...)
 
+MILP solver for control placment using a hybrid latin hypercube and distance criteria. Requires Gurobi licence.
+
+# Arguments 
+- `P`: The integer number of positive controls
+- `N`: The integer number of negative controls 
+- `plate`: A BitMatrix indicating the shape and active wells, use `trues(n,m)` for a full n x m plate.
+
+# Keyword Arguments 
+- `MILP_timelimit`: time limit in seconds for the solver to return a suboptimal solution if it hasn't found an optimal one
+- `MILP_output`: if true, solver prints status updates to the console. 
+
+"""
 function hybrid_MILP(P::Int,N::Int,plate::BitMatrix;MILP_timelimit=100,MILP_output=true,kwargs...)
 
     P+N <= sum(plate) ? nothing : error("There are more controls to place than active wells on the plate")

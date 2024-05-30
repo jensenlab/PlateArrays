@@ -1,4 +1,20 @@
-function distance_exchange(P,N,plate;iterations=2000,kwargs...)
+
+
+"""
+    distance_exchange(P::Int,N::Int,plate::BitMatrix;iterations=2000,kwargs...)   
+
+MILP solver for control placment using a hybrid latin hypercube and distance criteria. Requires Gurobi licence.
+
+# Arguments 
+- `P`: The integer number of positive controls
+- `N`: The integer number of negative controls 
+- `plate`: A BitMatrix indicating the shape and active wells, use `trues(n,m)` for a full n x m plate.
+
+# Keyword Arguments 
+- `iterations`: number of exchange iterations  
+
+"""
+function distance_exchange(P::Int,N::Int,plate::BitMatrix;iterations=2000,kwargs...)
 
     best_design=initialize_population(1,plate,P,N)[1]
     best_score=fitness_distance(best_design;kwargs...)

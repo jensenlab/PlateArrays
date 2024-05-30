@@ -233,7 +233,7 @@ end
 
 function fitness(design::PlateArray;lambda=0.5,lb_dist=0,ub_dist=1,lb_LHS=0,ub_LHS=1,kwargs...)
 
-
+    0<=lambda<=1 ? nothing : error("lambda must be between 0 and 1 inclusive.")
     s1=scale(distance_score_brute(design;kwargs...),lb_dist,ub_dist)
     s2=scale(LHS_score(design),lb_LHS,ub_LHS)
 

@@ -2,7 +2,21 @@
 
 
 
+"""
+    hybrid_MILP(P::Int,N::Int,plate::BitMatrix;MILP_timelimit=100,MILP_output=true,kwargs...)
 
+MILP solver for control placment using a hybrid latin hypercube and distance criteria. Requires Gurobi licence.
+
+# Arguments 
+- `P`: The integer number of positive controls
+- `N`: The integer number of negative controls 
+- `plate`: A BitMatrix indicating the shape and active wells, use `trues(n,m)` for a full n x m plate.
+
+# Keyword Arguments 
+- `MILP_timelimit`: time limit in seconds for the solver to return a suboptimal solution if it hasn't found an optimal one
+- `minimize`: if true, the solver minimizes the distance from experiment wells to control wells. if false, it will maximize (this is not useful for practical purposes but is helpful for assessing performance) 
+
+"""
 function distance_MILP(P::Int,N::Int,plate::BitMatrix;minimize=true,timelimit=100)
     R,C=size(plate)
     model=Model(Gurobi.Optimizer)

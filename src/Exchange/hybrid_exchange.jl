@@ -1,4 +1,21 @@
-function hybrid_exchange(P,N,plate;iterations=10000,kwargs...)
+
+
+"""
+    hybrid_exchange(P,N,plate;iterations=10000,kwargs...)   
+
+MILP solver for control placment using a hybrid latin hypercube and distance criteria. Requires Gurobi licence.
+
+# Arguments 
+- `P`: The integer number of positive controls
+- `N`: The integer number of negative controls 
+- `plate`: A BitMatrix indicating the shape and active wells, use `trues(n,m)` for a full n x m plate.
+
+# Keyword Arguments 
+- `iterations`: number of exchange iterations 
+- `lambda`: weight given to distance criteria, can range from (0,1). 0 means that we only care about the latin hypercube critera, 1 means we only care about distance. default is 0.5.  
+
+"""
+function hybrid_exchange(P::Int,N::Int,plate::BitMatrix;iterations::Int=10000,kwargs...)
     best_design=initialize_population(1,plate,P,N)[1]
     lb_LHS,ub_LHS=approximate_LHS_bound(best_design)
     min_dist_design=distance_exchange(P,N,plate;iterations=iterations)
