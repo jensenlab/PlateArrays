@@ -34,7 +34,7 @@ the `control_array` function generates microplate designs with optimal control p
 
     plot(design)
 ```
-[![example_plate](https://github.com/jensenlab/ControlArray/blob/main/example_plate.svg) ]  
+[![example_plate](https://github.com/jensenlab/ControlArray/blob/main/example_plate.svg)]  
 
 
 
