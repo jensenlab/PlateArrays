@@ -1,34 +1,28 @@
-# JensenLabDispense.jl
-[![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jensenlab/JensenLabDispense/blob/main/LICENSE)
-# Contents 
-[Description](#description) \
-[Installing JensenLabDispense](#installing-jensenlabdispense) \
-[Cobra](#cobra)
+# ControlArray.jl
+[![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jensenlab/ControlArray/blob/main/LICENSE)
 
 
 # Description 
-Julia Package for controlling liquid handlers in the Jensen Lab 
+Place optimal controls for detecting errors in microplate experiments. 
 
-# Installing JensenLabDispense
- Requires installation of  [Julia](https://julialang.org/downloads/). Once Julia is installed. Install JensenLabDispense by navigating to package mode:  
+# Installing ControlArray
+ Requires installation of  [Julia](https://julialang.org/downloads/). Once Julia is installed. Install ControlArray by navigating to package mode:  
 
 ```julia 
-add https://github.com/jensenlab/JensenLabDispense
+add https://github.com/jensenlab/ControlArray
 ```
 
-# Cobra  
+# Example Usage  
  CobraDispense generates a directory populated with the appropriate dispense files to control the Cobra Liquid handler
 
 ```julia
-    CobraDispense(
-        design::DataFrame,
-        directory::String,
-        source::String,
-        destination::String,
-        liquidclasses::Vector{String} ;
-        kwargs...)
+    using ControlArray 
+    plate = trues(8,12) # 96 well plate
+    design=control_array(12,12,plate;solver=hybrid_exchange)
+
+    plot(design)
 ```
-    
+[![example_plate](https://github.com/jensenlab/ControlArray/blob/main/example_plate.svg) ]  
 
 Create Cobra dipsense instructions for microplate source to destination operations
 
