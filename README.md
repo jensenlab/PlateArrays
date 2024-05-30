@@ -16,7 +16,7 @@ add https://github.com/jensenlab/ControlArray
 the `control_array` function generates microplate designs with optimal control placment. `control_array` takes three arguments: 
 1.  `P`: The number of positive controls in the design 
 2.  `N`: The number of negative controls in the design 
-3.  `plate`: A binary array showing the shape and active wells on the plate (wells that are allowed to be used for controls or experiments) 
+3.  `plate`: A binary array showing the shape of the plate and active wells (wells that are allowed to be used for controls or experiments) 
 
 `control_array` places controls using using one of four solvers: 
 
@@ -31,13 +31,19 @@ the `control_array` function generates microplate designs with optimal control p
     using ControlArray 
     plate = trues(8,12) # 96 well plate
     design=control_array(12,12,plate;solver=hybrid_exchange)
-
     plot(design)
 ```
 [![example_plate](https://github.com/jensenlab/ControlArray/blob/main/example_plate.svg)]  
 
 
-
+The solvers can handle situations when certain wells are "blocked". Here, wells A1-F2 are unavailable. 
+```julia 
+    plate[:,1].=false
+    plate[1:5,2].=false
+    design=control_array(12,12,plate;solver=hybrid_exchange)
+    plot(design)
+```
+[![example_plate_blocked](https://github.com/jensenlab/ControlArray/blob/main/example_plate_blocked.svg)] 
 
 
 
