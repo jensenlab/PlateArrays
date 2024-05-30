@@ -36,7 +36,7 @@ the `control_array` function generates microplate designs with optimal control p
 [![example_plate](https://github.com/jensenlab/ControlArray/blob/main/example_plate.svg)]  
 
 
-The solvers can handle situations when certain wells are "blocked". Here, wells A1-F2 are unavailable. 
+The solvers can handle situations when certain wells are "blocked". Here, wells A1-E2 are unavailable. The algorithms place controls that fill the new geometry of available wells. 
 ```julia 
     plate[:,1].=false
     plate[1:5,2].=false
