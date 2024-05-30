@@ -25,7 +25,7 @@ the `control_array` function generates microplate designs with optimal control p
 3. `hybrid_MILP`: An [MILP](https://en.wikipedia.org/wiki/Integer_programming) formulation of the control placement problem using the hybrid objective
 4. `distance_MILP`: An MILP formulation using only a maximin distance objective
 
-**Note**: MILP solvers return globally optimal solutions but their runtimes can be unpredictable, conversely coordinate exchange algorithms are not gauranteed to be globally optimal but scale more favorably for large problems. In practice, we find that the exchange algorithm returns near optimal solutions in a fraction of the time of the MILP solver for 384 and 1536 well plate problems. See documentation for solver hyperparameters. 
+**Note**: MILP solvers return globally optimal solutions but their runtimes can be unpredictable; conversely, coordinate exchange algorithms are not gauranteed to be globally optimal but scale more favorably for large problems. In practice, we find that the exchange algorithm returns near optimal solutions in a fraction of the time of the MILP solver for 384 and 1536 well plate problems. See documentation for solver hyperparameters. 
 # Example Usage 
 ```julia
     using ControlArray 
