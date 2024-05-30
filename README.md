@@ -33,7 +33,7 @@ the `control_array` function generates microplate designs with optimal control p
     design=control_array(12,12,plate;solver=hybrid_exchange)
     plot(design)
 ```
-[![example_plate](https://github.com/jensenlab/ControlArray/blob/main/example_plate.svg)]  
+![example_plate](https://github.com/jensenlab/ControlArray/blob/main/example_plate.svg)  
 
 
 The solvers can handle situations when certain wells are "blocked". Here, wells A1-E2 are unavailable. The algorithms place controls that fill the new geometry of available wells. 
@@ -43,7 +43,7 @@ The solvers can handle situations when certain wells are "blocked". Here, wells 
     design=control_array(12,12,plate;solver=hybrid_exchange)
     plot(design)
 ```
-[![example_plate_blocked](https://github.com/jensenlab/ControlArray/blob/main/example_plate_blocked.svg)] 
+![example_plate_blocked](https://github.com/jensenlab/ControlArray/blob/main/example_plate_blocked.svg)
 
 
 
