@@ -12,9 +12,21 @@ Place optimal controls for detecting errors in microplate experiments.
 add https://github.com/jensenlab/ControlArray
 ```
 
-# Example Usage  
- CobraDispense generates a directory populated with the appropriate dispense files to control the Cobra Liquid handler
+# Overview  
+the `control_array` function generates microplate designs with optimal control placment. `control_array` takes three arguments: 
+1.  `P`: The number of positive controls in the design 
+2.  `N`: The number of negative controls in the design 
+3.  `plate`: A binary array showing the shape and active wells on the plate (wells that are allowed to be used for controls or experiments) 
 
+`control_array` places controls using using one of four solvers: 
+
+1. `hybrid_exchange` (default): A coordinate exchange algorithm that uses a [hybrid latin hypercube and maximin objective criteria](https://bookdown.org/rbg/surrogates/chap4.html) to place controls.
+2. `distance_exchange`: A coordinate exchange algorithm that uses only a maximin distance criteria to place controls    
+3. `hybrid_MILP`: An [MILP](https://en.wikipedia.org/wiki/Integer_programming) formulation of the control placement problem using the hybrid objective
+4. `distance_MILP`: An MILP formulation using only a maximin distance objective
+
+**Note**: MILP solvers return globally optimal solutions but their runtimes can be unpredictable, conversely coordinate exchange algorithms are not gauranteed to be globally optimal but scale more favorably for large problems. In practice, we find that the exchange algorithm returns near optimal solutions in a fraction of the time of the MILP solver for 384 and 1536 well plate problems. See documentation for solver hyperparameters. 
+# Example Usage 
 ```julia
     using ControlArray 
     plate = trues(8,12) # 96 well plate
@@ -24,19 +36,7 @@ add https://github.com/jensenlab/ControlArray
 ```
 [![example_plate](https://github.com/jensenlab/ControlArray/blob/main/example_plate.svg) ]  
 
-Create Cobra dipsense instructions for microplate source to destination operations
 
-  ## Arguments 
-  * `design`: a (# of experiments) x (# of reagents) dataframe containing the volume of each reagent for each experiment
-  * `directory`: the ouput directory of the files. directory should be empty to begin with. 
-  * `source`: The source plate type. See **keys(cobra_platetypes)** for available options.
-  * `destination`: The destination plate type. See keys(cobra_platetypes) for available options. 
-  * `liquidclasses`: A vector of liquid class types. There must be a class for each reagents. Use "Water" as default. 
-
-  ## Keyword Arguments 
-  * `washtime`: The length of the wash step in milliseconds between each dispensing operation. Default is 20000 ms.
-  * `dispensepause`: if true, Cobra pauses over dispense wells to ensure large volume dispenses are accurately placed. Default is false 
-  * `predispensecount`: number of predispenses. Default is 3. 
 
 
 
