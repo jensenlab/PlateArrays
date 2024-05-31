@@ -210,16 +210,36 @@ function distance_score_brute(design::PlateArray;distance=manhattan_distance,kwa
     
     pos_coords=Tuple.(findall(x->x==true,design.pos))
     neg_coords=Tuple.(findall(x->x==true,design.neg))
+    if length(pos_coords)==0
+        pos_dist.=max(R,C)*design.plate
+    else
+        for r in 1:R 
+            for c in 1:C
+                if !design.plate[r,c]
+                    continue 
+                else 
+                    pos_dist[r,c] = minimum(distance.(((r,c),), pos_coords ))
 
-    for r in 1:R 
-        for c in 1:C
-            if !design.plate[r,c]
-                continue 
-            else 
-                pos_dist[r,c] = minimum(distance.(((r,c),), pos_coords ))
-                neg_dist[r,c]= minimum(distance.(((r,c),), neg_coords ))
+                end 
             end 
-        end 
+        end
+    end 
+    
+    if length(neg_coords)==0
+        neg_dist.=max(R,C)*design.plate
+    else
+
+
+        for r in 1:R 
+            for c in 1:C
+                if !design.plate[r,c]
+                    continue 
+                else 
+
+                    neg_dist[r,c]= minimum(distance.(((r,c),), neg_coords ))
+                end 
+            end 
+        end
     end 
     return sum(pos_dist .+ neg_dist)
 end 

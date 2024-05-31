@@ -30,7 +30,11 @@ function hybrid_exchange(P::Int,N::Int,plate::BitMatrix;iterations::Int=10000,kw
         if pos
             current_controls= design.pos .|| design.neg
             available= design.plate .&& .!current_controls
-            current_idx=rand(findall(x->x==true,design.pos))
+            pos_idxs=findall(x->x==true,design.pos)
+            if length(pos_idxs) ==0
+                continue 
+            end 
+            current_idx=rand(pos_idxs)
             new_idx=rand(findall(x->x==true,available))
 
             design.pos[current_idx]=false # swap the location of the active bits 
@@ -38,7 +42,11 @@ function hybrid_exchange(P::Int,N::Int,plate::BitMatrix;iterations::Int=10000,kw
         else
             current_controls= design.pos .|| design.neg
             available= design.plate .&& .!current_controls
-            current_idx=rand(findall(x->x==true,design.neg))
+            neg_idxs=findall(x->x==true,design.neg)
+            if length(neg_idxs) ==0
+                continue 
+            end 
+            current_idx=rand(neg_idxs)
             new_idx=rand(findall(x->x==true,available))
 
             design.neg[current_idx]=false # swap the location of the active bits 

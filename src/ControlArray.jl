@@ -39,6 +39,9 @@ Place optimal controls for detecting errors in microplate experiments
 
 """
 function control_array(P::Int,N::Int,plate::BitMatrix;solver=hybrid_exchange,kwargs...)
+    P >=0 ? nothing : error("P must be greater than or equal to 0")
+    N >=0 ? nothing : error("N must be greater than or equal to 0")
+    P+N <= sum(plate) ? nothing : error("The number of controls must be less than or equal to the number of available spaces.")
     return solver(P,N,plate;kwargs...)
 end 
 
