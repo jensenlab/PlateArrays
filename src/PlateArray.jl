@@ -1,4 +1,4 @@
-module ControlArray
+module PlateArray
 
 
 using Random,
@@ -50,4 +50,4 @@ export PlateArray,fitness,fitness_distance,hybrid_MILP,distance_MILP,distance_ex
 
 
 
-end # module ControlArray
+end # module PlateArray

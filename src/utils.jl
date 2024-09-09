@@ -1,9 +1,10 @@
-mutable struct PlateArray
+mutable struct Plate
     P::Int # number of positive controls 
     N::Int # number of negative controls 
-    plate::BitMatrix # indicator for which wells are active on the plate
+    wells::BitMatrix # indicator for which wells are active on the plate
     pos::BitMatrix # indicator for positive control wells
     neg::BitMatrix # indicator for negative control wells
+    Plate(P,N,wells,pos,neg)= any(pos .&& .!wells) || any(neg .&& .!wells) ? new(P,N,wells,pos,neg)
 end 
 
 

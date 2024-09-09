@@ -1,4 +1,4 @@
-# ControlArray.jl
+# PlateArray.jl
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jensenlab/ControlArray/blob/main/LICENSE)
 
 
@@ -9,7 +9,7 @@ Place optimal controls for detecting errors in microplate experiments.
  Requires installation of  [Julia](https://julialang.org/downloads/). Once Julia is installed. Install ControlArray by navigating to package mode:  
 
 ```julia 
-add https://github.com/jensenlab/ControlArray
+add https://github.com/jensenlab/PlateArray
 ```
 
 # Overview  
@@ -28,7 +28,7 @@ the `control_array` function generates microplate designs with optimal control p
 **Note**: MILP solvers return globally optimal solutions but their runtimes can be unpredictable; conversely, coordinate exchange algorithms are not gauranteed to be globally optimal but scale more favorably for large problems. In practice, we find that the exchange algorithm returns near optimal solutions in a fraction of the time of the MILP solver for 384 and 1536 well plate problems. See documentation for solver hyperparameters. 
 # Example Usage 
 ```julia
-    using ControlArray 
+    using PlateArray 
     plate = trues(8,12) # 96 well plate
     design=control_array(12,12,plate;solver=hybrid_exchange)
     plot(design)
