@@ -1,15 +1,15 @@
-# PlateArray.jl
+# PlateArrays.jl
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jensenlab/ControlArray/blob/main/LICENSE)
 
 
 # Description 
 Place optimal controls for detecting errors in microplate experiments. 
 
-# Installing ControlArray
+# Installing PlateArrays
  Requires installation of  [Julia](https://julialang.org/downloads/). Once Julia is installed. Install ControlArray by navigating to package mode:  
 
 ```julia 
-add https://github.com/jensenlab/PlateArray
+add https://github.com/jensenlab/PlateArrays
 ```
 
 # Overview  

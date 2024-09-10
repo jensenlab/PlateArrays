@@ -1,10 +1,13 @@
-mutable struct Plate
-    P::Int # number of positive controls 
-    N::Int # number of negative controls 
+struct PlateArray
     wells::BitMatrix # indicator for which wells are active on the plate
-    pos::BitMatrix # indicator for positive control wells
-    neg::BitMatrix # indicator for negative control wells
-    Plate(P,N,wells,pos,neg)= any(pos .&& .!wells) || any(neg .&& .!wells) ? new(P,N,wells,pos,neg)
+    positives::BitMatrix # indicator for positive control wells
+    negatives::BitMatrix # indicator for negative control wells
+    function PlateArray(wells,positives,negatives)
+        any(positives .&& negatives ) ? error("positive and negative controls cannot occupy the same well") : nothing 
+        any(positives .&& .!wells) ? error("positive controls must be placed in an active well") : nothing 
+        any(negatives .&& .!wells) ? error("negative controls must be placed in an active well") : nothing 
+        return new(wells,positives,negatives)
+    end 
 end 
 
 
@@ -69,20 +72,20 @@ end
 
 
 function LHS_score(design::PlateArray)
-    row_margin,col_margin=get_margins(design.plate)
+    row_margin,col_margin=get_margins(design.wells)
 
-    row_idxs=findall(x-> x>0,row_margin)
+    row_idxs=findall(x->x>0,row_margin)
     col_idxs=findall(x->x>0,col_margin)
 
     # grab only rows that have active wells (avoid divide by zero error later)
     valid_rows=row_margin[row_idxs]
     valid_cols=col_margin[col_idxs]
-    P=design.P
-    N=design.N
+    P=sum(design.positives)
+    N=sum(design.negatives)
 
 
-    p_rows,p_cols=get_margins(design.pos)
-    n_rows,n_cols=get_margins(design.neg)
+    p_rows,p_cols=get_margins(design.positives)
+    n_rows,n_cols=get_margins(design.negatives)
 
     p_rows=p_rows[row_idxs]
     p_cols=p_cols[col_idxs]
@@ -104,9 +107,9 @@ end
 
 function approximate_LHS_bound(design::PlateArray)
     lb=0
-    row_margin,col_margin=get_margins(design.plate)
-    P=design.P
-    N=design.N
+    row_margin,col_margin=get_margins(design.wells)
+    P=sum(design.positives)
+    N=sum(design.negatives)
     row_idxs=findall(x-> x>0,row_margin)
     col_idxs=findall(x->x>0,col_margin)
     valid_rows=row_margin[row_idxs]
@@ -129,10 +132,10 @@ function approximate_LHS_bound(design::PlateArray)
 
     pos_array=falses(length(row_idxs),length(col_idxs))
     neg_array=falses(length(row_idxs),length(col_idxs))
-    dir=false
-    if length(col_idxs) > length(row_idxs)
-        dir=true
-    end 
+
+    dir= length(col_idxs) > length(row_idxs)
+
+    
 
     p_rows,p_cols=fill_array_max_var(pos_array,P;coldir=dir)
     n_rows,n_cols=fill_array_max_var(neg_array,N;coldir=dir)
@@ -168,7 +171,7 @@ end
 
 
 function distance_score_ring(design::PlateArray)
-    R,C=size(design.plate)
+    R,C=size(design.wells)
     pos_dist=zeros(Int,R,C)
     neg_dist=zeros(Int,R,C)
     
@@ -177,13 +180,13 @@ function distance_score_ring(design::PlateArray)
 
     for r in 1:R
         for c in 1:C
-            if !design.plate[r,c]
+            if !design.wells[r,c]
                 continue 
             else 
                 for ring in 0:M
                     idxs=CartesianIndex.(get_ring(r,c,ring,R,C))
-                    foundpos=any(design.pos[idxs])
-                    foundneg=any(design.neg[idxs])
+                    foundpos=any(design.positives[idxs])
+                    foundneg=any(design.negatives[idxs])
                     if foundpos && foundneg 
                         break 
                     else
@@ -205,18 +208,18 @@ end
 
 
 function distance_score_brute(design::PlateArray;distance=manhattan_distance,kwargs...)
-    R,C=size(design.plate)
+    R,C=size(design.wells)
     pos_dist=zeros(Int,R,C)
     neg_dist=zeros(Int,R,C)
     
-    pos_coords=Tuple.(findall(x->x==true,design.pos))
-    neg_coords=Tuple.(findall(x->x==true,design.neg))
+    pos_coords=Tuple.(findall(x->x==true,design.positives))
+    neg_coords=Tuple.(findall(x->x==true,design.negatives))
     if length(pos_coords)==0
-        pos_dist.=max(R,C)*design.plate
+        pos_dist .= max(R,C)*design.wells
     else
         for r in 1:R 
             for c in 1:C
-                if !design.plate[r,c]
+                if !design.wells[r,c]
                     continue 
                 else 
                     pos_dist[r,c] = minimum(distance.(((r,c),), pos_coords ))
@@ -227,13 +230,13 @@ function distance_score_brute(design::PlateArray;distance=manhattan_distance,kwa
     end 
     
     if length(neg_coords)==0
-        neg_dist.=max(R,C)*design.plate
+        neg_dist.=max(R,C)*design.wells
     else
 
 
         for r in 1:R 
             for c in 1:C
-                if !design.plate[r,c]
+                if !design.wells[r,c]
                     continue 
                 else 
 
@@ -274,19 +277,19 @@ function fitness_distance(design::PlateArray;minimize=true,kwargs...)
     end 
 end 
 
-function initialize_population(popsize::Int,plate::BitMatrix,P,N)
+function initialize_population(popsize::Int,wells::BitMatrix,P,N)
     population=[]
-    availables=findall(x->x==true,plate)
-
+    availables=findall(x->x==true,wells)
+    R,C=size(wells)
     for i=1:popsize
-        pos=falses(size(plate))
-        neg=falses(size(plate))
+        pos=falses(R,C)
+        neg=falses(R,C)
         pos_idx=sample(availables,P;replace=false)
         pos[pos_idx] .=true 
-        neg_available=findall(x->x==true, plate .&& .!pos)
+        neg_available=findall(x->x==true, wells .&& .!pos)
         neg_idx=sample(neg_available,N;replace=false)
         neg[neg_idx].=true
-        design=PlateArray(P,N,plate,pos,neg)
+        design=PlateArray(wells,pos,neg)
         push!(population,design)
     end 
     return population

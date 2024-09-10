@@ -3,22 +3,22 @@
 
 
 """
-    hybrid_MILP(P::Int,N::Int,plate::BitMatrix;MILP_timelimit=100,MILP_output=true,kwargs...)
+    hybrid_MILP(P::Int,N::Int,wells::BitMatrix;MILP_timelimit=100,MILP_output=true,kwargs...)
 
 MILP solver for control placment using a hybrid latin hypercube and distance criteria. Requires Gurobi licence.
 
 # Arguments 
 - `P`: The integer number of positive controls
 - `N`: The integer number of negative controls 
-- `plate`: A BitMatrix indicating the shape and active wells, use `trues(n,m)` for a full n x m plate.
+- `wells`: A BitMatrix indicating the shape and active wells, use `trues(n,m)` for a full n x m plate.
 
 # Keyword Arguments 
 - `MILP_timelimit`: time limit in seconds for the solver to return a suboptimal solution if it hasn't found an optimal one
 - `minimize`: if true, the solver minimizes the distance from experiment wells to control wells. if false, it will maximize (this is not useful for practical purposes but is helpful for assessing performance) 
 
 """
-function distance_MILP(P::Int,N::Int,plate::BitMatrix;minimize=true,timelimit=100)
-    R,C=size(plate)
+function distance_MILP(P::Int,N::Int,wells::BitMatrix;minimize=true,timelimit=100)
+    R,C=size(wells)
     model=Model(Gurobi.Optimizer)
     set_attribute(model,"TimeLimit",timelimit)
     @variable(model, x[1:R,1:C],Bin);
@@ -34,8 +34,8 @@ function distance_MILP(P::Int,N::Int,plate::BitMatrix;minimize=true,timelimit=10
     for row in 1:R
         for col in 1:C
             @constraint(model,x[row,col]+y[row,col]<=1)
-            @constraint(model, x[row,col] <= plate[row,col])
-            @constraint(model,y[row,col] <= plate[row,col])
+            @constraint(model, x[row,col] <= wells[row,col])
+            @constraint(model,y[row,col] <= wells[row,col])
 
         end
     end
@@ -46,15 +46,15 @@ function distance_MILP(P::Int,N::Int,plate::BitMatrix;minimize=true,timelimit=10
         for row in 1:R
             for col in 1:C
                 for ring in 0:M
-                    wells=get_ring(row,col,ring,R,C)
-                    r=map(y->y[1],wells)
-                    c=map(y->y[2],wells)
-                    @constraint(model,dwx[row,col]>=ring+1-(ring+1)*sum([x[r[i],c[i]] for i =1:length(wells)]));
-                    @constraint(model,dwy[row,col]>=ring+1-(ring+1)*sum([y[r[i],c[i]] for i =1:length(wells)]))
+                    w=get_ring(row,col,ring,R,C)
+                    r=map(y->y[1],w)
+                    c=map(y->y[2],w)
+                    @constraint(model,dwx[row,col]>=ring+1-(ring+1)*sum([x[r[i],c[i]] for i =1:length(w)]));
+                    @constraint(model,dwy[row,col]>=ring+1-(ring+1)*sum([y[r[i],c[i]] for i =1:length(w)]))
                 end
             end
         end
-        @objective(model,Min,sum(plate .* (dwx+dwy)));
+        @objective(model,Min,sum(wells .* (dwx+dwy)));
     else 
         @variable(model, Idwx[1:R,1:C,1:M+1],Bin)
         @variable(model,Idwy[1:R,1:C,1:M+1],Bin)
@@ -62,11 +62,11 @@ function distance_MILP(P::Int,N::Int,plate::BitMatrix;minimize=true,timelimit=10
         for row in 1:R
             for col in 1:C
                 for ring in 0:M
-                    wells=get_ring(row,col,ring,R,C)
-                    r=map(y->y[1],wells)
-                    c=map(y->y[2],wells)
-                    @constraint(model ,Idwx[row,col,ring+1] => {sum([x[r[i],c[i]] for i =1:length(wells)]) ==0})
-                    @constraint(model ,Idwy[row,col,ring+1] => {sum([y[r[i],c[i]] for i =1:length(wells)]) ==0})
+                    w=get_ring(row,col,ring,R,C)
+                    r=map(y->y[1],w)
+                    c=map(y->y[2],w)
+                    @constraint(model ,Idwx[row,col,ring+1] => {sum([x[r[i],c[i]] for i =1:length(w)]) ==0})
+                    @constraint(model ,Idwy[row,col,ring+1] => {sum([y[r[i],c[i]] for i =1:length(w)]) ==0})
                     
                     @constraint(model,dwx[row,col]<= ring +M*Idwx[row,col,ring+1])
                     @constraint(model,dwy[row,col]<= ring +M*Idwy[row,col,ring+1])
@@ -77,10 +77,10 @@ function distance_MILP(P::Int,N::Int,plate::BitMatrix;minimize=true,timelimit=10
                 end
             end
         end
-        @objective(model,Min,-1*sum(plate.*(dwx+dwy)));
+        @objective(model,Min,-1*sum(wells.*(dwx+dwy)));
     end
     optimize!(model)
-    return PlateArray(P,N,plate,BitMatrix(JuMP.value.(x)),BitMatrix(JuMP.value.(y)))
+    return PlateArray(wells,BitMatrix(JuMP.value.(x)),BitMatrix(JuMP.value.(y)))
 end
 
 #= test 
