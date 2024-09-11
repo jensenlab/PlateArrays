@@ -39,9 +39,9 @@ Place optimal controls for detecting errors in microplate experiments
 
 """
 function place_controls(P::Int,N::Int,wells::BitMatrix;solver::Function=hybrid_exchange,kwargs...)
-    P >=0 ? nothing : error("P must be greater than or equal to 0")
-    N >=0 ? nothing : error("N must be greater than or equal to 0")
-    P+N <= sum(wells) ? nothing : error("The number of controls must be less than or equal to the number of available spaces.")
+    P >=0 ? nothing : throw(DomainError(P,"P must be >= 0"))
+    N >=0 ? nothing : throw(DomainError(N,"N must be >=  0"))
+    P+N <= sum(wells) ? nothing : throw(OccupancyError("The number of controls must be less than or equal to the number of available spaces."))
     return solver(P,N,wells;kwargs...)
         
 end 
