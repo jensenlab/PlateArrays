@@ -3,21 +3,24 @@
 
 
 """
-    hybrid_MILP(P::Int,N::Int,wells::BitMatrix;MILP_timelimit=100,MILP_output=true,kwargs...)
+    function MILP(P::Int,N::Int,wells::BitMatrix;objective::Function=hybrid,minimize=true,timelimit=100)
 
-MILP solver for control placment using a hybrid latin hypercube and distance criteria. Requires Gurobi licence.
+MILP solver for control placment. Requires Gurobi licence.
 
 # Arguments 
+- `wells`: A BitMatrix indicating the shape and active wells, use `trues(n,m)` for a full n x m plate.
 - `P`: The integer number of positive controls
 - `N`: The integer number of negative controls 
-- `wells`: A BitMatrix indicating the shape and active wells, use `trues(n,m)` for a full n x m plate.
 
 # Keyword Arguments 
-- `MILP_timelimit`: time limit in seconds for the solver to return a suboptimal solution if it hasn't found an optimal one
+- `objective`: the objective type for the MILP solver. Must be either 'distance' or 'hybrid'.
+- `timelimit`: time limit in seconds for the solver to return a suboptimal solution if it hasn't found an optimal one
 - `minimize`: if true, the solver minimizes the distance from experiment wells to control wells. if false, it will maximize (this is not useful for practical purposes but is helpful for assessing performance) 
 
 """
-function distance_MILP(P::Int,N::Int,wells::BitMatrix;minimize=true,timelimit=100)
+function MILP(wells::BitMatrix,P::Int,N::Int;objective::Function=hybrid,minimize=true,timelimit=100)
+
+    in(objective,[hybrid,distance]) ? nothing : throw(ArgumentError("the objective for the MILP Solver must either be 'distance' or 'hybrid'"))
     R,C=size(wells)
     model=Model(Gurobi.Optimizer)
     set_attribute(model,"TimeLimit",timelimit)
@@ -41,12 +44,32 @@ function distance_MILP(P::Int,N::Int,wells::BitMatrix;minimize=true,timelimit=10
     end
     M=max(R,C)
 
+    if objective==hybrid
+        epr,epc,enr,enc=expected_LHS(random_platearray(wells,P,N)) # given the plate shape, find the expected number of controls per row and column in a uniformly distributed array of controls. 
+
+        #constrain the number of controls to be as close as possible to the expected LHS 
+        for row in 1:R
+            @constraint(model, sum(x[row,:])<= Int(ceil(epr[row]))) 
+            @constraint(model,sum(x[row,:]) >= Int(floor(epr[row])))
+            @constraint(model, sum(y[row,:])<= Int(ceil(enr[row])))
+            @constraint(model,sum(y[row,:])>= Int(floor(enr[row])))
+        end 
+
+        for col in 1:C
+            @constraint(model,sum(x[:,col])<= Int(ceil(epc[col])))
+            @constraint(model,sum(x[:,col])>= Int(floor(epc[col])))
+            @constraint(model,sum(y[:,col])<= Int(ceil(enc[col])))
+            @constraint(model,sum(y[:,col])>= Int(floor(enc[col])))
+        end
+    end 
+
+
 
     if minimize
         for row in 1:R
             for col in 1:C
                 for ring in 0:M
-                    w=get_ring(row,col,ring,R,C)
+                    w=neighboring_ring(row,col,ring,R,C)
                     r=map(y->y[1],w)
                     c=map(y->y[2],w)
                     @constraint(model,dwx[row,col]>=ring+1-(ring+1)*sum([x[r[i],c[i]] for i =1:length(w)]));
@@ -62,7 +85,7 @@ function distance_MILP(P::Int,N::Int,wells::BitMatrix;minimize=true,timelimit=10
         for row in 1:R
             for col in 1:C
                 for ring in 0:M
-                    w=get_ring(row,col,ring,R,C)
+                    w=neighboring_ring(row,col,ring,R,C)
                     r=map(y->y[1],w)
                     c=map(y->y[2],w)
                     @constraint(model ,Idwx[row,col,ring+1] => {sum([x[r[i],c[i]] for i =1:length(w)]) ==0})
