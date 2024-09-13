@@ -13,7 +13,7 @@ MILP solver for control placment. Requires Gurobi licence.
 - `N`: The integer number of negative controls 
 
 # Keyword Arguments 
-- `objective`: the objective type for the MILP solver. Must be either 'distance' or 'hybrid'.
+- `objective`: the objective type for the MILP solver. Must be either 'minimax' or 'hybrid'.
 - `timelimit`: time limit in seconds for the solver to return a suboptimal solution if it hasn't found an optimal one
 - `minimize`: if true, the solver minimizes the distance from experiment wells to control wells. if false, it will maximize (this is not useful for practical purposes but is helpful for assessing performance) 
 

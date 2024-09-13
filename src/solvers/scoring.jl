@@ -154,7 +154,7 @@ end
 
 
 
-function distance(platearray::PlateArray;kwargs...)
+function minimax(platearray::PlateArray;kwargs...)
         return distance_score_brute(platearray;kwargs...)
 end 
 
@@ -167,7 +167,7 @@ end
 function hybrid(platearray::PlateArray;lambda=0.5,lb_dist=0,ub_dist=1,lb_LHS=0,ub_LHS=1,kwargs...)
 
     0<=lambda<=1 ? nothing : error("lambda must be between 0 and 1 inclusive.")
-    s1=scale(distance_score_brute(platearray;kwargs...),lb_dist,ub_dist)
+    s1=scale(minimax(platearray;kwargs...),lb_dist,ub_dist)
     s2=scale(LHS(platearray),lb_LHS,ub_LHS)
 
     score=lambda*s1 + (1-lambda)*s2

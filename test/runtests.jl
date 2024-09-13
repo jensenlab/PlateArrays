@@ -48,10 +48,10 @@ plate=PlateArray(wells,pos,neg)
     @test margins(wells) == ([10, 10, 10, 10, 11, 11, 11, 11], [4, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 0])
     @test LHS(plate) ≈ 18.31746031746031
     @test neighbors(4,4,8,12) ==  [(3, 4),(5, 4),(4, 5),(4, 3)]
-    @test distance(plate) ==322
-    @test hybrid(plate;lambda=0.5) ≈ LHS(plate)/2 + distance(plate)/2
+    @test minimax(plate) ==322
+    @test hybrid(plate;lambda=0.5) ≈ LHS(plate)/2 + minimax(plate)/2
     @test hybrid(plate;lambda=0) ≈ LHS(plate)
-    @test hybrid(plate; lambda=1) ≈ distance(plate)
+    @test hybrid(plate; lambda=1) ≈ minimax(plate)
     
 end
 

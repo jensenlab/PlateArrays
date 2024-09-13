@@ -12,7 +12,7 @@ Exchange solver for control placment
 
 
 # Keyword Arguments 
-- `objective` : The objective function criteria, choose from `distance`, `LHS`, and `hybrid`. The hybrid objective is slower than the other objectives because it calculates bounds to balance two objectives.
+- `objective` : The objective function criteria, choose from `minimax`, `LHS`, and `hybrid`. The hybrid objective is slower than the other objectives because it calculates bounds to balance two objectives.
 - `minimize` : flip the objective sign
 - `restarts` : Number of solver restarts. The solver returns the best solution among the restarts  
 - `iterations`: number of exchange iterations per run.
@@ -28,8 +28,8 @@ function exchange(wells::BitMatrix,P::Int,N::Int;objective::Function=hybrid,mini
         max_distance_plate=exchange(wells,P,N;objective=distance,set_bounds=false,minimize=false,restarts=1,iterations=iterations,kwargs...)
         min_LHS_plate=exchange(wells,P,N;objective=LHS,set_bounds=false,minimize=true,restarts=1,iterations=iterations,kwargs...)
         max_LHS_plate=exchange(wells,P,N;objective=LHS,set_bounds=false,minimize=false,restarts=1,iterations=iterations,kwargs...)
-        a=distance(min_distance_plate)
-        b=distance(max_distance_plate)
+        a=minimax(min_distance_plate)
+        b=minimax(max_distance_plate)
         c=LHS(min_LHS_plate)
         d=LHS(max_LHS_plate)
         lambda=0.5

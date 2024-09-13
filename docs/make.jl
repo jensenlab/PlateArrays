@@ -3,4 +3,8 @@ push!(LOAD_PATH,"../src/")
 
 using Documenter, PlateArrays
 
-makedocs(sitename="My Documentation")
+makedocs(sitename="PlateArrays.jl",
+pages = [ 
+    "Home" => "index.md"
+]
+)

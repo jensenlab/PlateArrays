@@ -13,3 +13,29 @@ function random_platearray(wells::BitMatrix,P::Int,N::Int)
     neg[neg_idx].=true
     return PlateArray(wells,pos,neg)
 end 
+
+
+
+
+
+"""
+    runs(platearray::PlateArray)
+
+Compute the non-control active wells of a PlateArray.
+
+"""
+function runs(platearray::PlateArray)
+    return platearray.wells .&& .!platearray.positives .&& .!platearray.negatives
+end 
+
+
+"""
+    active_indices(plate::BitMatrix)
+
+Compute the integer indices of active wells. 
+"""
+function active_indices(plate::BitMatrix)
+    r,c=size(plate)
+    x=vec(reshape(plate,r*c,1))
+    return findall(y->y==true,x)
+end 
