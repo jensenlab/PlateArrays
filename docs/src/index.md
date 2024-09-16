@@ -7,9 +7,10 @@ A julia package for placing experiments onto mircowell plates.
 
 # Package Features
 
-* Place experiments onto any size plate 
-* Optionally block certain wells from being used
-
+* Array runs for experiments onto any size plate 
+* Optimally place control wells for any run array. 
+* Block wells from being used
+* Minimize labware usage by binpacking runs from multiple experiments onto as few plates as possible.
 
 
 ## Getting Started 
