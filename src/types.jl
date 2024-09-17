@@ -27,3 +27,26 @@ struct PlateArray
 end 
 
 
+
+"""
+    struct Experiment
+        runs::Int
+        positive_controls::Int
+        negative_controls::Int
+    end 
+
+    Collect the number of runs and controls in an experiment.
+"""
+struct Experiment
+    runs::Int
+    positive_controls::Int
+    negative_controls::Int
+    function Experiment(runs,positives,negatives)
+        runs > 0 ? nothing : throw(DomainError(runs,"runs must be a positive integer"))
+        positives > 0 ? nothing : throw(DomainError(positives,"positive_controls must be a positive integer"))
+        negatives > 0 ? nothing : throw(DomainError(negatives,"negative_controls must be a positive integer"))
+        return new(runs,positives,negatives)
+    end 
+end 
+
+const Expt=Experiment

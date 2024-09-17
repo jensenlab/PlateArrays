@@ -2,14 +2,14 @@ using JuMP , Gurobi
 
 
 
-function bound_plates(wells::BitMatrix,runs,controls)
+function bound_plates(wells::BitMatrix,experiments::Vararg{Experiment})
     N=sum(wells)
     n_plates=0
-    for i in eachindex(runs)
-        max_runs_per_plate=N-controls[i]
+    for expt in experiments
+        max_runs_per_plate=N-expt.positive_controls-expt.negative_controls
         runs_fit=0
-        while runs_fit < runs[i]
-            runs_fit+=min(max_runs_per_plate,runs[i])
+        while runs_fit < expt.runs
+            runs_fit+=min(max_runs_per_plate,expt.runs)
             n_plates+=1
         end 
     end 
@@ -23,16 +23,15 @@ end
 
 
 
-function assign_plates(wells::BitMatrix,runs::Vector{Int},controls::Vector{Int};bound_plates=bound_plates,plate_timelimit=100,quiet=true,kwargs...)
-    length(runs)==length(controls) ? nothing : throw(ArgumentError("the runs and controls vectors must be the same length"))
+function assign_plates(wells::BitMatrix,experiments::Vararg{Experiment};bound_plates=bound_plates,plate_timelimit=100,quiet=true,kwargs...)
     ## Place experiments on plates by sequential minimization of the following criteria 
     # 1. minimize the number of plates used 
     # 2. minimize the number of splits between experiments on plates 
     # 3. minimize the total number of runs (minimize the number of controls needed because of splitting) 
     W=sum(wells)
-    N=length(runs) # number of experiments 
+    N=length(experiments) # number of experiments 
 
-    P=bound_plates(wells,runs,controls) # bound on number of plates
+    P=bound_plates(wells,experiments...) # bound on number of plates
 
     model=Model(Gurobi.Optimizer)
     set_attribute(model,"TimeLimit",plate_timelimit)
@@ -43,6 +42,8 @@ function assign_plates(wells::BitMatrix,runs::Vector{Int},controls::Vector{Int};
     @variable(model, r[1:N,1:P] >= 0, Int ) # number of runs from experiment n on plate p
     @variable(model, c[1:N,1:P], Bin) # indicator for controls for experiment n on plate p 
     @variable(model, Ip[1:P],Bin) # indicator for if plate p is needed
+    controls=map(x->x.positive_controls+x.negative_controls,experiments)
+    runs=map(x->x.runs,experiments)
 
     for p in 1:P
         @constraint(model, sum(r[:,p]+controls.*c[:,p]) <= W * Ip[p]) # number of runs per plate in use must be less than or equal to the plate size across all experiments
