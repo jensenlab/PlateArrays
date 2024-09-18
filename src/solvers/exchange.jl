@@ -24,8 +24,8 @@ function exchange(wells::BitMatrix,P::Int,N::Int;objective::Function=hybrid,mini
 
     # set bounds for the hybrid objective if needed 
     if objective==hybrid 
-        min_distance_plate=exchange(wells,P,N;objective=distance,set_bounds=false,minimize=true,restarts=1,iterations=iterations,kwargs...) 
-        max_distance_plate=exchange(wells,P,N;objective=distance,set_bounds=false,minimize=false,restarts=1,iterations=iterations,kwargs...)
+        min_distance_plate=exchange(wells,P,N;objective=minimax,set_bounds=false,minimize=true,restarts=1,iterations=iterations,kwargs...) 
+        max_distance_plate=exchange(wells,P,N;objective=minimax,set_bounds=false,minimize=false,restarts=1,iterations=iterations,kwargs...)
         min_LHS_plate=exchange(wells,P,N;objective=LHS,set_bounds=false,minimize=true,restarts=1,iterations=iterations,kwargs...)
         max_LHS_plate=exchange(wells,P,N;objective=LHS,set_bounds=false,minimize=false,restarts=1,iterations=iterations,kwargs...)
         a=minimax(min_distance_plate)

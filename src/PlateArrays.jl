@@ -14,15 +14,17 @@ include("./solvers/scoring.jl")
 include("./solvers/exchange.jl")
 include("./solvers/MILP.jl")
 include("./controls/place_controls.jl")
-include("./arrayer/partition.jl")
+include("./assign/partition.jl")
+include("./assign/assign_plates.jl")
 include("./visualize/visualize_plate.jl")
+include("./arrayer/arrayer.jl")
 
 
 
 
 
 #types.jl
-export PlateArray
+export PlateArray,Experiment,Expt,OccupancyError
 
 #utils.jl
 export runs, random_platearray,active_indices
@@ -36,6 +38,10 @@ export MILP
 export place_controls
 #partition.jl
 export partition
+#assign_plates
+export assign_plates
+#arrayer.jl
+export arrayer
 #visualize_plate
 export plot
 
