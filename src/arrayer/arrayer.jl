@@ -1,5 +1,16 @@
 
+"""
+    arrayer(wells::BitMatrix,experiments::Vararg{Experiment};kwargs...)
 
+Array Experiment objects onto plates in three steps: 
+1. assign all experiments to as few plates as possible
+2. partition plates that contain multiple experiments and select wells to hold each run. Use central wells first. 
+3. place a full complement of controls on each plate that has a given experiment
+
+# Arguments 
+- `wells`: A BitMatrix of active wells on each plate (block any inactive wells by setting them to false)
+- `experiments`: Array a variable number of `Experiment` objects
+"""
 function arrayer(wells::BitMatrix,experiments::Vararg{Experiment};kwargs...)
 
     assignments=assign_plates(wells,experiments...;kwargs...)
