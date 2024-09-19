@@ -42,9 +42,9 @@ struct Experiment
     positive_controls::Int
     negative_controls::Int
     function Experiment(runs,positives,negatives)
-        runs > 0 ? nothing : throw(DomainError(runs,"runs must be a positive integer"))
-        positives > 0 ? nothing : throw(DomainError(positives,"positive_controls must be a positive integer"))
-        negatives > 0 ? nothing : throw(DomainError(negatives,"negative_controls must be a positive integer"))
+        runs >= 0 ? nothing : throw(DomainError(runs,"runs must be a non-negative integer"))
+        positives >= 0 ? nothing : throw(DomainError(positives,"positive_controls must be a non-negative integer"))
+        negatives >= 0 ? nothing : throw(DomainError(negatives,"negative_controls must be a non-negative integer"))
         return new(runs,positives,negatives)
     end 
 end 
