@@ -5,7 +5,8 @@ using Random,
 JuMP,
 Gurobi,
 Distributions,
-Plots
+Plots,
+ColorBrewer
 
 import Plots: plot
 include("./types.jl")
