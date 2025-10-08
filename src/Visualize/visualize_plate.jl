@@ -37,7 +37,7 @@ function plot(design::PlateArray;pos="blue",neg="red",inactive="darkgray",run="w
 end 
 
 
-function plot(designs::Vector{PlateArray};pos::String="blue",neg::String="red",inactive::String="darkgray",runs=palette("Pastel2",8),k=0.6)
+function plot(designs::Vector{PlateArray};pos::String="blue",neg::String="red",inactive::String="darkgray",runs=ColorBrewer.palette("Pastel2",8),k=0.6)
     0 <= k <= 1 ? nothing : error("k must be between zero and one")
     plt=plot()
     allequal(map(x->size(x.wells),designs)) ? nothing : error("all designs must have the same plate shape")
