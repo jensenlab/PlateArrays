@@ -71,16 +71,17 @@ Schedule Experiment objects onto plates in three steps:
 ```julia 
 using PlateArrays 
 
-expt1 = Experiment(128,12,12) # an experiment that has 128 total runs. Each plate that has runs from this experiment should have 12 positive and 12 negative controls 
-expt2 = Experiment(42, 8,8) 
+expt1 = Experiment(92,12,12) # an experiment that has 92 total runs. Each plate that has runs from this experiment should have 12 positive and 12 negative controls 
+expt2 = Experiment(24, 6,6) 
+expt2 = Experiment(72,12,12) 
 plate = trues(8,12) # a standard 96 well plate 
 
 plate_arrays = arrayer(plate,expt1,expt2) 
 
-array_plots = plot.(plate_arrays)
+array_plots = plot(plate_arrays)
 
 
 ```
-![example_plate_blocked](https://github.com/jensenlab/PlateArrays/blob/main/readme_figs/arrayer.png)
+![arrayed_plates](https://github.com/jensenlab/PlateArrays/blob/main/readme_figs/plates.svg)
 
 

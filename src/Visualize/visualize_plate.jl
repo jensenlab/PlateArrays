@@ -84,6 +84,12 @@ function plot(designs::Vector{PlateArray};pos::String="blue",neg::String="red",i
 end 
 
 
+
+function plot(designs::Matrix{PlateArray};kwargs...)
+    return [plot(designs[:,i]) for i in 1:size(designs)[2] ]
+end 
+
+
 function alphabet_code(n) 
     
     alphabet=collect('A':'Z')
