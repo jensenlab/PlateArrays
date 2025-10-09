@@ -65,7 +65,7 @@ Create microplate layouts for multiple experiments in three steps:
 ## Arguments 
 - `wells`: A BitMatrix of active wells on each plate (block any inactive wells by setting them to false)
 - `experiments`: Array a variable number of `Experiment` objects
-"""
+
 
 ## Example Usage 
 
