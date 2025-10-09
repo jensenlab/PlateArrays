@@ -3,12 +3,13 @@
 
 
 # Description 
-Place optimal controls for detecting errors in microplate experiments. 
+Create microplate layouts and place optimal controls for detecting errors.
 
 # Installing PlateArrays
- Requires installation of  [Julia](https://julialang.org/downloads/). Once Julia is installed. Install ControlArray by navigating to package mode:  
+ Requires installation of  [Julia](https://julialang.org/downloads/). Once Julia is installed. Install PlateArrays by navigating to package mode `]`:  
 
 ```julia 
+pkg>
 add https://github.com/jensenlab/PlateArrays
 ```
 
@@ -56,7 +57,7 @@ The solvers can handle situations when certain wells are "blocked". Here, wells 
 
 # The `arrayer` function 
 
-Schedule Experiment objects onto plates in three steps: 
+Create microplate layouts for multiple experiments in three steps: 
 1. assign all experiments to as few plates as possible
 2. partition plates that contain multiple experiments and select wells to hold each run. Use central wells first. 
 3. place a full complement of controls on each plate that has a given experiment
