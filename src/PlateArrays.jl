@@ -17,7 +17,7 @@ include("./solvers/MILP.jl")
 include("./controls/place_controls.jl")
 include("./assign/partition.jl")
 include("./assign/assign_plates.jl")
-include("./visualize/visualize_plate.jl")
+include("./visualization/visualize_plate.jl")
 include("./arrayer/arrayer.jl")
 
 
