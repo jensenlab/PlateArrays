@@ -10,6 +10,8 @@ Array Experiment objects onto plates in three steps:
 # Arguments 
 - `wells`: A BitMatrix of active wells on each plate (block any inactive wells by setting them to false)
 - `experiments`: Array a variable number of `Experiment` objects
+
+Returns a Matrix of PlateArray objects with dimensions E x P, where E is the number of experimens and P the number of plates.
 """
 function arrayer(wells::BitMatrix,experiments::Vararg{Experiment};kwargs...)
 
