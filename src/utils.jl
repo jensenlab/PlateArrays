@@ -39,3 +39,18 @@ function active_indices(plate::BitMatrix)
     x=vec(reshape(plate,r*c,1))
     return findall(y->y==true,x)
 end 
+
+
+function letter_code(n::Integer) 
+    
+    alphabet=collect('A':'Z')
+    k=length(alphabet)
+    return repeat(alphabet[mod(n-1,k)+1],cld(n,k))
+end 
+
+
+function wellnames(platearray::PlateArray) 
+    R,C = size(platearray.wells)
+    return ["$(letter_code(i))$j" for i in 1:R, j in 1:C]
+end 
+
