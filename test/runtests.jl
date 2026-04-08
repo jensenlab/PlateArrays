@@ -1,4 +1,4 @@
-using Test , PlateArrays
+using Test , PlateArrays, DataFrames 
 
 import PlateArrays: OccupancyError,margins,expected_LHS,neighbors
 
@@ -15,6 +15,8 @@ import PlateArrays: OccupancyError,margins,expected_LHS,neighbors
     y[1,1]=true
     @test_throws OccupancyError PlateArray(x,y,falses(8,12))
     @test_throws OccupancyError PlateArray(x,falses(8,12),y)
+    @test DataFrame(PlateArray(trues(8,12),falses(8,12),falses(8,12))) isa DataFrame
+    @test PlateArray(DataFrame(PlateArray(trues(8,12),falses(8,12),falses(8,12)))) == PlateArray(trues(8,12),falses(8,12),falses(8,12))
 end
 
 
