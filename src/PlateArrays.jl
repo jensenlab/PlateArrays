@@ -6,11 +6,15 @@ JuMP,
 Gurobi,
 Distributions,
 Plots,
-ColorBrewer
+ColorBrewer,
+DataFrames
 
 import Plots: plot
+import DataFrames: DataFrame 
+import Base: == 
 include("./types.jl")
 include("./utils.jl")
+include("./interface.jl")
 include("./solvers/scoring.jl")
 include("./solvers/exchange.jl")
 include("./solvers/MILP.jl")

@@ -26,6 +26,7 @@ struct PlateArray
     end 
 end 
 
+==(x::PlateArray,y::PlateArray) = x.wells == y.wells && x.positives==y.positives && x.negatives == y.negatives
 
 
 """
