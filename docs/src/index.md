@@ -2,28 +2,25 @@
 
 *Arraying software for microwell plates* 
 
-A julia package for placing experiments onto mircowell plates. 
+A julia package for scheduling microplate layouts. PlateArrays.jl is useful for:
 
+* Optimally placing control wells for any size plate. 
+* Blocking wells from being used
+* Minimizing labware usage by slotting runs from multiple experiments onto as few plates as possible.
+* Exporting visualizing plate layouts
 
-# Package Features
-
-* Array runs for experiments onto any size plate 
-* Optimally place control wells for any run array. 
-* Block wells from being used
-* Minimize labware usage by binpacking runs from multiple experiments onto as few plates as possible.
-
-
-## Getting Started 
+## Installation 
 
 PlateArrays is currently unregistered with Julia, but instead can be installed using the followng command: 
 
 ```julia 
-pkg> add https://github.com/jensenlab/PlateArrays
+Pkg.add(url= "https://github.com/jensenlab/PlateArrays")
 ```
 
 
 
 
-```@docs
-place_controls(wells::BitMatrix,P::Int,N::Int;solver::Function=exchange,objective::Function=hybrid,kwargs...)
-```
+
+
+
+

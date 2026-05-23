@@ -20,7 +20,7 @@ MILP solver for control placment. Requires Gurobi licence.
 """
 function MILP(wells::BitMatrix,P::Int,N::Int;objective::Function=hybrid,minimize=true,timelimit=100)
 
-    in(objective,[hybrid,distance]) ? nothing : throw(ArgumentError("the objective for the MILP Solver must either be 'distance' or 'hybrid'"))
+    in(objective,[hybrid,minimax]) ? nothing : throw(ArgumentError("the objective for the MILP Solver must either be 'minimax' or 'hybrid'"))
     R,C=size(wells)
     model=Model(Gurobi.Optimizer)
     set_attribute(model,"TimeLimit",timelimit)

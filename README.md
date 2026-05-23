@@ -1,16 +1,15 @@
 # PlateArrays.jl
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jensenlab/ControlArray/blob/main/LICENSE)
 
-
-# Description 
-Create microplate layouts and place optimal controls for detecting errors.
+Schedule microplate layouts and place optimal controls for detecting errors.
 
 # Installing PlateArrays
- Requires installation of  [Julia](https://julialang.org/downloads/). Once Julia is installed. Install PlateArrays by navigating to package mode `]`:  
+ Requires installation of  [Julia](https://julialang.org/downloads/) 
+ 
+ PlateArrays is currently unregistered with Julia, but instead can be installed using the followng command: 
 
 ```julia 
-pkg>
-add https://github.com/jensenlab/PlateArrays
+Pkg.add(url= "https://github.com/jensenlab/PlateArrays")
 ```
 
 # The `place_controls` function
@@ -38,7 +37,7 @@ Place optimal controls for detecting errors in microplate experiments
     using PlateArrays , DataFrames 
     plate = trues(8,12) # 96 well plate
     # place 12 positive and 12 negative controls with a minimax objective and exchange algorithm
-    design=place_controls(plate,12,12;solver = exchange, objective=hybrid)
+    design=place_controls(plate,12,12;solver = "exchange", objective="hybrid")
     plot(design)
     # save design as a dataframe and vice-versa 
     df = DataFrame(design)
