@@ -8,3 +8,7 @@ pages = [
     "Home" => "index.md"
 ]
 )
+
+deploydocs(
+    repo = "github.com/jensenlab/PlateArrays.git",
+)
