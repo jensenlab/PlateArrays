@@ -1,4 +1,4 @@
-# Quickstart
+# Quick Start Guide
 
 `PlateArrays.jl` helps you place positive and negative controls on microwell plates. You provide the active wells on the plate and the number of controls to place; [`place_controls`](@ref) optimizes their locations and returns a [`PlateArray`](@ref).
 
