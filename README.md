@@ -1,5 +1,6 @@
 # PlateArrays.jl
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jensenlab/ControlArray/blob/main/LICENSE)
+[![](https://img.shields.io/badge/docs-dev-blue.svg)](http://jensenlab.net/PlateArrays/dev/)
 
 Schedule microplate layouts and place optimal controls for detecting errors.
 
