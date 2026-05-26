@@ -17,6 +17,7 @@ import PlateArrays: OccupancyError,margins,expected_LHS,neighbors, hybrid, minim
     @test_throws OccupancyError PlateArray(x,falses(8,12),y)
     @test DataFrame(PlateArray(trues(8,12),falses(8,12),falses(8,12))) isa DataFrame
     @test PlateArray(DataFrame(PlateArray(trues(8,12),falses(8,12),falses(8,12)))) == PlateArray(trues(8,12),falses(8,12),falses(8,12))
+    @test size(PlateArray(trues(8,12),falses(8,12),falses(8,12))) == size(trues(8,12))
 end
 
 
