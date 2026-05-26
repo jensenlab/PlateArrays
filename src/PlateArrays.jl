@@ -15,7 +15,7 @@ import Base: ==
 include("./types.jl")
 include("./utils.jl")
 include("./interface.jl")
-include("./solvers/scoring.jl")
+include("./solvers/objectives.jl")
 include("./solvers/exchange.jl")
 include("./solvers/MILP.jl")
 include("./controls/place_controls.jl")
@@ -28,23 +28,16 @@ include("./arrayer/arrayer.jl")
 
 
 
+
+
+
+
 #types.jl
 export PlateArray,Experiment,Expt,OccupancyError
-
 #utils.jl
 export runs, random_platearray,active_indices
-#scoring.jl
-export minimax,LHS,hybrid
-#exchange.jl 
-export exchange
-#MILP.jl
-export MILP
 #place_controls.jl
-export place_controls
-#partition.jl
-export partition
-#assign_plates
-export assign_plates
+export place_controls, solvers, objectives 
 #arrayer.jl
 export arrayer
 #visualize_plate
