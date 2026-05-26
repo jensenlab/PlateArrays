@@ -1,6 +1,6 @@
 name = "PlateArrays"
 uuid = "52f550af-10d2-4094-8a84-3f014d56cfcb"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Ben David <66976120+bmdavid2@users.noreply.github.com>"]
 
 [deps]
