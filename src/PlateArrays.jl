@@ -11,7 +11,7 @@ DataFrames
 
 import Plots: plot
 import DataFrames: DataFrame 
-import Base: == 
+import Base: == , size 
 include("./types.jl")
 include("./utils.jl")
 include("./interface.jl")

@@ -29,6 +29,18 @@ end
 ==(x::PlateArray,y::PlateArray) = x.wells == y.wells && x.positives==y.positives && x.negatives == y.negatives
 
 
+
+""" 
+    size(p::PlateArray) 
+
+Return the size (rows x colummns) of the BitMatrices that define the PlateArray 
+
+"""
+function size(p::PlateArray) 
+    return size(p.wells) # wells, positives, and negatives should all be equal 
+end 
+
+
 """
     struct Experiment
         runs::Int
