@@ -5,7 +5,9 @@ using Documenter, PlateArrays
 
 makedocs(sitename="PlateArrays.jl",
 pages = [ 
-    "Home" => "index.md"
+    "Home" => "index.md",
+    "Quick Start Guide" => "quickstart.md",
+    "API Reference" => "api-reference.md"
 ]
 )
 

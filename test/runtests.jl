@@ -1,6 +1,6 @@
 using Test , PlateArrays, DataFrames 
 
-import PlateArrays: OccupancyError,margins,expected_LHS,neighbors
+import PlateArrays: OccupancyError,margins,expected_LHS,neighbors, hybrid, minimax, LHS, exchange, MILP
 
 @testset "Construction" begin
     @test isa(PlateArray(trues(8,12),falses(8,12),falses(8,12)),PlateArray)
@@ -57,7 +57,11 @@ plate=PlateArray(wells,pos,neg)
     
 end
 
-
-
+@testset "place_controls" begin 
+    @test place_controls(trues(8,12),8,8) isa PlateArray 
+    @test place_controls(trues(8,12),8,8,solver="MILP") isa PlateArray 
+    @test place_controls(trues(8,12),8,8,objective="LHS") isa PlateArray 
+    @test place_controls(trues(8,12),8,8,ojbective="minimax") isa PlateArray 
+end 
 
 
