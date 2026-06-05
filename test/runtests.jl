@@ -18,6 +18,10 @@ import PlateArrays: OccupancyError,margins,expected_LHS,neighbors, hybrid, minim
     @test DataFrame(PlateArray(trues(8,12),falses(8,12),falses(8,12))) isa DataFrame
     @test PlateArray(DataFrame(PlateArray(trues(8,12),falses(8,12),falses(8,12)))) == PlateArray(trues(8,12),falses(8,12),falses(8,12))
     @test size(PlateArray(trues(8,12),falses(8,12),falses(8,12))) == size(trues(8,12))
+    p = PlateArray(trues(8,12),falses(8,12),falses(8,12))
+    df = DataFrame(p) 
+    df.extra .= "example_extra_data"
+    @test p == PlateArray(df) 
 end
 
 
