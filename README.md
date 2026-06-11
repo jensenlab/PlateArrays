@@ -4,14 +4,24 @@
 
 Schedule microplate layouts and place optimal controls for detecting errors.
 
-# Installing PlateArrays
- Requires installation of  [Julia](https://julialang.org/downloads/) 
- 
- PlateArrays is currently unregistered with Julia, but instead can be installed using the followng command: 
+## Installation 
+
+PlateArrays is available in the [`Jensen Lab Registry`](https://github.com/jensenlab/JensenLabRegistry). Follow the instructions to add the registry before continuing.
+
+Once the registry has been added, run the following command: 
 
 ```julia 
+# once JensenLabRegistry has been added
+using Pkg
 Pkg.add(url= "https://github.com/jensenlab/PlateArrays")
 ```
+
+Then, load the pckage: 
+
+```julia 
+using PlateArrays
+```
+
 
 # The `place_controls` function
 
